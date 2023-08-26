@@ -1,0 +1,281 @@
+<<<<<<< Updated upstream
+<!DOCTYPE html
+PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Welcome to Robai gaming page</title>
+</head>
+
+<body background="images/h5back.jpg">
+<h2><font color="#FF00FF">Robai gaming page</font></h2>
+<p>
+<b><a href="HoMM5/Index.html">Heroes of Might and Magic 5</a></b>
+</p>
+<p>
+<b><a href="LordsWM/Index.html">Lords of War and money</a></b>
+</p>
+<p>
+<b><a href="DDO/index.html">Dungeons and Dragons Online</a></b>
+</p>
+<p>
+<b><a href="Gladiatus/Index.html">Gladiatus</a></b>
+</p>
+</body>
+</html>
+=======
+<!DOCTYPE html>
+<html>
+<head>
+<title>Drop rates in Battlehand (by Robai)</title>
+<style>
+table {border-collapse: collapse; text-align: center;}
+td    {padding: 5px;border-style: groove;}
+th    {padding: 5px;border-style: groove;}
+</style>
+<script src="Dungeons.js"></script>
+<script>
+function CreateTable() {
+  last_clicked_button = document.getElementById('reset85');
+  //x is array of rows of text variable dung, which is in file Dungeons.js
+  x = dung.split("\n");
+  var ilgiai = x.map(w => w.split(/[\t]+/).length);
+  let max_ilgis = Math.max(...ilgiai);
+  var table = document.createElement("table");
+  //Table head
+  var thead = document.createElement("thead");
+  table.appendChild(thead);
+  thead.appendChild(document.createElement("tr"));
+  thead.children[0].innerHTML = "<th>Dungeon</th><th>Difficulty</th><th>Act</th><th>Keys</th><th>Fame</th><th>Gold</th><th>Crystals</th><th>Runes</th><th>Mats</th><th>RandomMats</th><th>BoosterTypes</th><th>BoosterRarities</th>";
+  //Table body
+  var tbody = document.createElement("tbody");
+  tbody.id = "pagr_lent";
+  for (let i = 0; i < x.length; i++) {
+    eilute = tbody.insertRow();
+    let y = x[i].split(/[\t]/);
+    for (let j = 0; j < max_ilgis; j++) {
+      cele = eilute.insertCell();
+      cele.innerHTML = y[j];
+    }
+  }
+  table.appendChild(tbody);
+  document.body.appendChild(table);
+}
+function ResetTable() {
+  last_clicked_button.style.backgroundColor = '';
+  var x = dung.split("\n");
+  var ilgiai = x.map(w => w.split(/[\t]+/).length);
+  let max_ilgis = Math.max(...ilgiai);
+  //Updating rows (childs) of tbody:
+  var tbody = document.createElement("tbody");
+  for (let i = 0; i < x.length; i++) {
+    eilute = tbody.insertRow();
+    let y = x[i].split(/[\t]/);
+    for (let j = 0; j < max_ilgis; j++) {
+      cele = eilute.insertCell();
+      cele.innerHTML = y[j];
+    }
+  }
+  document.getElementById('pagr_lent').replaceChildren(...tbody.childNodes);
+}
+
+function SortByGoldKeyRatio() {
+  ResetTable();
+  last_clicked_button.style.backgroundColor = '';
+  last_clicked_button = event.target;
+  last_clicked_button.style.backgroundColor = '#D5F5E3';
+  BoosterNames();
+  for (let i = 1; i < x.length; i++) {
+    var keys = parseInt(document.getElementById('pagr_lent').childNodes[i].childNodes[3].innerHTML,10);
+    var gold = parseInt(document.getElementById('pagr_lent').childNodes[i].childNodes[5].innerHTML,10);
+	var ratio = gold/keys;
+	var b=0; //number of positions to be moved
+	for (let j = i-1; j>=0; j--) {
+	  var keys_max = parseInt(document.getElementById('pagr_lent').childNodes[j].childNodes[3].innerHTML,10);
+      var gold_max = parseInt(document.getElementById('pagr_lent').childNodes[j].childNodes[5].innerHTML,10);
+      var ratio_max = gold_max/keys_max;
+	  if (ratio_max<ratio) {b=b+1;}
+	}
+	document.getElementById('pagr_lent').insertBefore(document.getElementById('pagr_lent').childNodes[i],document.getElementById('pagr_lent').childNodes[i-b]);
+  }
+  AddGoldKeyRatio(1);
+}
+function AddGoldKeyRatio(gf) {
+  for (let i = 0; i < x.length; i++) {
+    var keys = parseInt(document.getElementById('pagr_lent').childNodes[i].childNodes[3].innerHTML,10);
+    var gold = parseInt(document.getElementById('pagr_lent').childNodes[i].childNodes[5].innerHTML,10);
+    if (gold>0) {
+	  var cele = document.getElementById('pagr_lent').childNodes[i].childNodes[5];
+      cele.innerHTML = gold + " (<b>" + (gold/keys).toFixed(2) + " gold/key</b>)";
+	  if (gf==1) {
+	    cele.style.backgroundColor = '#D5F5E3';
+		cele.innerHTML = gold + " (<b style='color:#4A235A;'>" + (gold/keys).toFixed(2) + " gold/key</b>)";
+	    } else {cele.innerHTML = gold + " (" + (gold/keys).toFixed(2) + " gold/key)";}
+    }
+  }
+}
+
+function BoosterNames() {
+  for (let i = 0; i < x.length; i++) {
+  var booster_cell = document.getElementById('pagr_lent').childNodes[i].childNodes[10].innerHTML;
+  document.getElementById('pagr_lent').childNodes[i].childNodes[10].innerHTML = booster_cell.replace('0','Fire').replace('1','Earth').replace('2','Air').replace('3','Spirit').replace('4','Water').replace('5','Neutral');
+  }
+}
+
+function Rikiuoti(Pav,Stulp) {
+  var show_gold_key = document.getElementById('keep_gold_ratio').checked;
+  ResetTable();
+  last_clicked_button.style.backgroundColor = '';
+  last_clicked_button = event.target;
+  last_clicked_button.style.backgroundColor = '#D5F5E3'; 
+  BoosterNames();
+  if (show_gold_key) {AddGoldKeyRatio();}
+  for (let i = 1; i < x.length; i++) {
+    var keys = parseInt(document.getElementById('pagr_lent').childNodes[i].childNodes[3].innerHTML,10);
+    var prad_cele = document.getElementById('pagr_lent').childNodes[i].childNodes[Stulp].innerHTML.split(" (")[0];
+    var vekt = prad_cele.split(",");
+    var percentage_per_key = 0;
+	var avr_quant = 0;
+	for (let k = 0; k < vekt.length; k++) {
+      var mat_name = vekt[k].split("|")[0]; //"Venom"
+	  if (mat_name==Pav) {
+        var mat_percentage = parseInt(vekt[k].split("|")[1]); //9
+        var mat_quantities = vekt[k].split("|")[2]; //"1-2" or "1-2 "
+        if (mat_quantities.split("-").length==1) {avr_quant = parseInt(mat_quantities);} else {avr_quant = (parseInt(mat_quantities.split("-")[0])+parseInt(mat_quantities.split("-")[1]))/2;}
+        percentage_per_key = avr_quant*mat_percentage/keys;
+	  }
+	}
+	var b=0; //number of positions to be moved
+	for (let j = i-1; j>=0; j--) {
+	  keys = parseInt(document.getElementById('pagr_lent').childNodes[j].childNodes[3].innerHTML,10);
+      prad_cele = document.getElementById('pagr_lent').childNodes[j].childNodes[Stulp].innerHTML.split(" (")[0];
+      vekt = prad_cele.split(",");
+      percentage_per_key_max = 0;
+	  avr_quant = 0;
+	  for (let k = 0; k < vekt.length; k++) {
+        mat_name = vekt[k].split("|")[0]; //"Venom"
+	    if (mat_name==Pav) {
+          mat_percentage = parseInt(vekt[k].split("|")[1]); //9
+          mat_quantities = vekt[k].split("|")[2]; //"1-2" or "1-2 "
+          if (mat_quantities.split("-").length==1) {avr_quant = parseInt(mat_quantities);} else {avr_quant = (parseInt(mat_quantities.split("-")[0])+parseInt(mat_quantities.split("-")[1]))/2;}
+          percentage_per_key_max = avr_quant*mat_percentage/keys;
+	    }
+	  }
+	  if (percentage_per_key_max<percentage_per_key) {b=b+1;}
+    }
+	document.getElementById('pagr_lent').insertBefore(document.getElementById('pagr_lent').childNodes[i],document.getElementById('pagr_lent').childNodes[i-b]);
+  }
+  AddKeyRatio(Pav,Stulp);
+}
+function AddKeyRatio(Pav,Stulp) {
+  for (let i = 0; i < x.length; i++) {
+    var keys = parseInt(document.getElementById('pagr_lent').childNodes[i].childNodes[3].innerHTML,10);
+    var prad_cele = document.getElementById('pagr_lent').childNodes[i].childNodes[Stulp].innerHTML.split(" (")[0];
+    var vekt = prad_cele.split(",");
+    var percentage_per_key = 0;
+	var avr_quant = 0;
+	for (let k = 0; k < vekt.length; k++) {
+      var mat_name = vekt[k].split("|")[0]; //"Venom"
+	  if (mat_name==Pav) {
+        var mat_percentage = parseInt(vekt[k].split("|")[1]); //9
+        var mat_quantities = vekt[k].split("|")[2]; //"1-2" or "1-2 "
+        if (mat_quantities.split("-").length==1) {avr_quant = parseInt(mat_quantities);} else {avr_quant = (parseInt(mat_quantities.split("-")[0])+parseInt(mat_quantities.split("-")[1]))/2;}
+        percentage_per_key = avr_quant*mat_percentage/keys;
+	  }
+	}
+    if (percentage_per_key>0){
+	  var cele = document.getElementById('pagr_lent').childNodes[i].childNodes[Stulp];
+      cele.innerHTML = prad_cele + " (<b style='color:#4A235A;'>" + percentage_per_key.toFixed(2) + "%/key</b>, "+Pav+")";
+	  cele.style.backgroundColor = '#D5F5E3';
+    }
+  }
+}
+</script>
+</head>
+<body onload="CreateTable()">
+<h2>Drop rates in Battlehand</h2>
+<p>RawData was extracted from Jai's HUD, sorting was made by Robai.<br>
+Drop chances don't include Random drops, so keep in mind that Random drops give additional drops.<br>
+The meaning of RandomMats "1,2,0,0" is this: this dungeon can drop up to one 1-star jar, also can drop up to two 2-star jars, but never drops 3-star or 4-star jars as random drops (well, the meaning of "4-star jar" here is actually "up to 4-star jar" (so you can get 1-star jar too), also keep in mind that Premium time gives double loot, so you can get more drops than the table shows).<br>
+In "Knoll's Wood Elite IX" row you see "Beetle Juice|20%|1-2". It means that there is 20% chance for Beetle Juice drop per one run (5 keys) and it can drop 1 or 2 Beetle Juice, but if you press button <button onclick="Rikiuoti('Beetle Juice',8)">Beetle Juice</button> it will sort the table by "drop chance per key" and you'll see "Beetle Juice|20%|1-2 (6.00%/key, Beetle Juice)" in the <b><i>first row</i></b>, it means that KWe9 is the best drop location for Beetle Juice (not counting random drops). On top of that you see RandomMats "3,0,0,0" in the same row (and Beetle Juice is 1-star jar), which means that it's possible to get 2+3=5 Beetle Juice per one run, and even more with double loot on (but very small chance for that).</p>
+<h3>Press a button for sorting the table:</h3>
+
+<table>
+  <tr>
+    <th>Raw, Gold, Sands</th>
+    <td><button id ="reset85" onclick="ResetTable()">RawData</button>
+<button onclick="SortByGoldKeyRatio()">Gold/key</button>
+<button onclick="Rikiuoti('Sands of Time',8)">Sands of Time/key</button>
+<br><input id="keep_gold_ratio" type="checkbox" checked="checked" value="Bike">show Gold/key ratio for all buttons (except RawData)</td>
+  </tr>
+  <tr>
+    <th>Hero Crystals/key</th>
+    <td><button onclick="Rikiuoti('Fire',6)">FireCrystal</button>
+<button onclick="Rikiuoti('Air',6)">AirCrystal</button>
+<button onclick="Rikiuoti('Earth',6)">EarthCrystal</button>
+<button onclick="Rikiuoti('Water',6)">WaterCrystal</button>
+<button onclick="Rikiuoti('Spirit',6)">SpiritCrystal</button><br></td>
+  </tr>
+  <tr>
+    <th>Hero Runes/key</th>
+    <td><button onclick="Rikiuoti('Monty',7)">Monty</button>
+<button onclick="Rikiuoti('Fergus',7)">Fergus</button>
+<button onclick="Rikiuoti('Red',7)">Red</button>
+<button onclick="Rikiuoti('Trix',7)">Trix</button>
+<button onclick="Rikiuoti('Thrudd',7)">Thrudd</button>
+<button onclick="Rikiuoti('Bree',7)">Bree</button>
+<button onclick="Rikiuoti('Brom',7)">Brom</button>
+<button onclick="Rikiuoti('Hawkeye',7)">Hawkeye</button>
+<button onclick="Rikiuoti('Krell',7)">Krell</button>
+<button onclick="Rikiuoti('Jinx',7)">Jinx</button>
+<button onclick="Rikiuoti('Logan',7)">Logan</button>
+<button onclick="Rikiuoti('Gilda',7)">Gilda</button>
+<button onclick="Rikiuoti('Peg',7)">Peg</button><br></td>
+  </tr>
+  <tr>
+    <th>Jars/key</th>
+    <td><button onclick="Rikiuoti('Beetle Juice',8)">Beetle Juice</button>
+<button onclick="Rikiuoti('Blue Jam',8)">Blue Jam</button>
+<button onclick="Rikiuoti('Brains',8)">Brains</button>
+<button onclick="Rikiuoti('Charged Ore',8)">Charged Ore</button>
+<button onclick="Rikiuoti('Crystals',8)">Crystals</button>
+<button onclick="Rikiuoti('Dragon\'s Breath',8)">Dragon's Breath</button>
+<button onclick="Rikiuoti('Dung Dollop',8)">Dung Dollop</button>
+<button onclick="Rikiuoti('Ectoplasm',8)">Ectoplasm</button>
+<button onclick="Rikiuoti('Eyeballs',8)">Eyeballs</button>
+<button onclick="Rikiuoti('Fireflies',8)">Fireflies</button>
+<button onclick="Rikiuoti('Frost Bite',8)">Frost Bite</button>
+<button onclick="Rikiuoti('Honey',8)">Honey</button>
+<button onclick="Rikiuoti('Infinity',8)">Infinity</button>
+<button onclick="Rikiuoti('Leeches',8)">Leeches</button>
+<button onclick="Rikiuoti('Magma',8)">Magma</button>
+<button onclick="Rikiuoti('Marmyte',8)">Marmyte</button>
+<button onclick="Rikiuoti('Mean Spirit',8)">Mean Spirit</button>
+<button onclick="Rikiuoti('Milk',8)">Milk</button>
+<button onclick="Rikiuoti('Miracle Water',8)">Miracle Water</button>
+<button onclick="Rikiuoti('Oil',8)">Oil</button>
+<button onclick="Rikiuoti('Ore Particles',8)">Ore Particles</button>
+<button onclick="Rikiuoti('Phoenix Feather',8)">Phoenix Feather</button>
+<button onclick="Rikiuoti('Pixie Dust',8)">Pixie Dust</button>
+<button onclick="Rikiuoti('Sea Salt',8)">Sea Salt</button>
+<button onclick="Rikiuoti('SnapWeed',8)">SnapWeed</button>
+<button onclick="Rikiuoti('Spindle Eggs',8)">Spindle Eggs</button>
+<button onclick="Rikiuoti('Spirit Stone',8)">Spirit Stone</button>
+<button onclick="Rikiuoti('Stardust',8)">Stardust</button>
+<button onclick="Rikiuoti('Strength Stone',8)">Strength Stone</button>
+<button onclick="Rikiuoti('Swamp Spirit',8)">Swamp Spirit</button>
+<button onclick="Rikiuoti('Titanium Ore',8)">Titanium Ore</button>
+<button onclick="Rikiuoti('Valerian Root',8)">Valerian Root</button>
+<button onclick="Rikiuoti('Venom',8)">Venom</button>
+<button onclick="Rikiuoti('Vital Fluid',8)">Vital Fluid</button>
+<button onclick="Rikiuoti('Water Vapour',8)">Water Vapour</button>
+<button onclick="Rikiuoti('Weeder Seeds',8)">Weeder Seeds</button>
+<button onclick="Rikiuoti('Zapperball',8)">Zapperball</button></td>
+  </tr>
+</table>
+
+</body>
+</html>
+>>>>>>> Stashed changes
